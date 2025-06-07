@@ -3,7 +3,9 @@ import { createContext, useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
-const backendURL = "http://localhost:3000";
+
+// Sử dụng biến môi trường hoặc fallback về localhost
+const backendURL = "https://konechat.onrender.com" ;
 console.log("Backend URL:", backendURL);
 
 // Cấu hình axios
