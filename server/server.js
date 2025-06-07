@@ -56,14 +56,12 @@ io.on("connection", (socket) => {
     app.use("/api/auth", userRouter);
     app.use("/api/messages", messageRouter);
 
-    if (process.env.NODE_ENV !== "production") {
-      const PORT = process.env.PORT || 3000;
-      server.listen(PORT, () => {
-        console.log("Server is running on: " + PORT);
-        console.log("CORS enabled for all origins");
-        console.log("MongoDB URI:", process.env.MONGODB_URI);
-      });
-    }
+    const PORT = process.env.PORT || 3000;
+    server.listen(PORT, () => {
+      console.log("Server is running on: " + PORT);
+      console.log("CORS enabled for all origins");
+      console.log("MongoDB URI:", process.env.MONGODB_URI);
+    });
   } catch (err) {
     console.error("Error during server startup:", err.message);
   }
