@@ -52,47 +52,24 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
   const { email, pw } = req.body;
   try {
-    const userData = await User.findOne({ email })
-      .select('email fullName pw img bio')
-      .maxTimeMS(5000)
-      .lean();
-    
+    const userData = await User.findOne({ email });
     if (!userData) {
-      return res.status(404).json({ 
-        success: false, 
-        message: "User not found" 
-      });
+      return res.json({ success: false, message: "User not found" });
     }
-
     const isPwCorrect = await bcrypt.compare(pw, userData.pw);
     if (!isPwCorrect) {
-      return res.status(401).json({ 
-        success: false, 
-        message: "Invalid credentials" 
-      });
+      return res.json({ success: false, message: "Invalid credentials" });
     }
-
-    delete userData.pw;
-
     const token = generateToken(userData._id);
-    res.status(200).json({
+    res.json({
       success: true,
       userData,
       token,
-      message: "Login successfully",
+      message: "login successfully",
     });
   } catch (error) {
-    console.error("Login error:", error);
-    if (error.name === 'MongooseError' && error.message.includes('timed out')) {
-      return res.status(504).json({ 
-        success: false, 
-        message: "Database operation timed out. Please try again." 
-      });
-    }
-    res.status(500).json({ 
-      success: false, 
-      message: "Internal server error" 
-    });
+    console.log(error.message);
+    res.json({ success: false, message: error.message });
   }
 };
 

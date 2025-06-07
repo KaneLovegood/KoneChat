@@ -3,9 +3,7 @@ import { createContext, useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
-
-// Sử dụng biến môi trường hoặc fallback về localhost
-const backendURL = "https://kone-chat-backend.vercel.app" ;
+const backendURL = "http://localhost:3000";
 console.log("Backend URL:", backendURL);
 
 // Cấu hình axios
@@ -107,32 +105,7 @@ export const AuthProvider = ({ children }) => {
     if (!userData || socket?.connected) return;
     const newSocket = io(backendURL, {
       query: { userId: userData._id },
-      transports: ['polling'],
-      reconnection: true,
-      reconnectionAttempts: 5,
-      reconnectionDelay: 1000,
-      timeout: 20000,
-      autoConnect: true,
-      withCredentials: true
     });
-
-    newSocket.on('connect_error', (error) => {
-      console.error('Socket connection error:', error);
-      toast.error('Failed to connect to chat server');
-    });
-
-    newSocket.on('connect', () => {
-      console.log('Socket connected successfully');
-    });
-
-    newSocket.on('disconnect', (reason) => {
-      console.log('Socket disconnected:', reason);
-      if (reason === 'io server disconnect') {
-        // Server đã ngắt kết nối, thử kết nối lại
-        newSocket.connect();
-      }
-    });
-
     newSocket.connect();
     setSocket(newSocket);
     newSocket.on("getOnlineUsers", (userIds) => {
