@@ -8,27 +8,44 @@ const signup = async (req, res) => {
   const { fullName, email, pw, bio } = req.body;
   try {
     if (!fullName || !email || !pw || !bio) {
-      return res.json({ success: false, message: "Missing details" });
+      return res.status(400).json({ 
+        success: false, 
+        message: "Missing details" 
+      });
     }
+
     const user = await User.findOne({ email });
     if (user) {
-      return res.json({ success: false, message: "Account already exists" });
+      return res.status(400).json({ 
+        success: false, 
+        message: "Account already exists" 
+      });
     }
+
     const protein = await bcrypt.genSalt(5);
     const hashedPw = await bcrypt.hash(pw, protein);
 
-    const newUser = await User.create({ fullName, email, pw: hashedPw, bio });
+    const newUser = await User.create({ 
+      fullName, 
+      email, 
+      pw: hashedPw, 
+      bio 
+    });
 
     const token = generateToken(newUser._id);
-    res.json({
+    
+    return res.status(201).json({
       success: true,
       userData: newUser,
       token,
-      message: "created successfully",
+      message: "Account created successfully"
     });
   } catch (error) {
-    console.log(error.message);
-    res.json({ success: false, message: error.message });
+    console.error("Signup error:", error);
+    return res.status(500).json({ 
+      success: false, 
+      message: "Internal server error" 
+    });
   }
 };
 
