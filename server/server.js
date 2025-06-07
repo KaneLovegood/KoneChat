@@ -32,11 +32,12 @@ export const io = new Server(server, {
     allowedHeaders: ["Content-Type", "Authorization", "token"],
     credentials: true
   },
-  transports: ['websocket', 'polling'],
+  transports: ['polling'],
   pingTimeout: 60000,
   pingInterval: 25000,
   upgradeTimeout: 30000,
-  allowEIO3: true
+  allowEIO3: true,
+  path: '/socket.io/'
 });
 
 //store online users

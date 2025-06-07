@@ -107,7 +107,7 @@ export const AuthProvider = ({ children }) => {
     if (!userData || socket?.connected) return;
     const newSocket = io(backendURL, {
       query: { userId: userData._id },
-      transports: ['websocket', 'polling'],
+      transports: ['polling'],
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
@@ -123,6 +123,14 @@ export const AuthProvider = ({ children }) => {
 
     newSocket.on('connect', () => {
       console.log('Socket connected successfully');
+    });
+
+    newSocket.on('disconnect', (reason) => {
+      console.log('Socket disconnected:', reason);
+      if (reason === 'io server disconnect') {
+        // Server đã ngắt kết nối, thử kết nối lại
+        newSocket.connect();
+      }
     });
 
     newSocket.connect();
