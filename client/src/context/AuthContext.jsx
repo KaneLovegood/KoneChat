@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 
 // Sử dụng biến môi trường hoặc fallback về localhost
-const backendURL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+const backendURL = "https://kone-chat-backend-esptz416i-kane-lovegoods-projects-fac17334.vercel.app" ;
 console.log("Backend URL:", backendURL);
 
 // Cấu hình axios
