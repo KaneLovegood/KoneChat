@@ -12,9 +12,8 @@ const server = http.createServer(app);
 
 // Middleware
 app.use(cors());
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
-
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 //socket.io server
 export const io = new Server(server, {
@@ -57,13 +56,17 @@ io.on("connection", (socket) => {
     app.use("/api/auth", userRouter);
     app.use("/api/messages", messageRouter);
 
-    const PORT = process.env.PORT || 3000;
-    server.listen(PORT, () => {
-      console.log("Server is running on: " + PORT);
-      console.log("CORS enabled for all origins");
-      console.log("MongoDB URI:", process.env.MONGODB_URI);
-    });
+    if (process.env.NODE_ENV !== "production") {
+      const PORT = process.env.PORT || 3000;
+      server.listen(PORT, () => {
+        console.log("Server is running on: " + PORT);
+        console.log("CORS enabled for all origins");
+        console.log("MongoDB URI:", process.env.MONGODB_URI);
+      });
+    }
   } catch (err) {
     console.error("Error during server startup:", err.message);
   }
 })();
+//export server for vercel
+export default server;

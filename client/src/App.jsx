@@ -10,7 +10,7 @@ const App = () => {
   const {authUser} = useContext(AuthContext)
   const navi = useNavigate()
   return (
-    <div  className="bg-[url('./assets/chat-app-assets/bgImage.svg')] bg-contain ">
+    <div  className="bg-[url('/bgImage.svg')] bg-contain ">
       <Toaster/>
 
       <Routes>
