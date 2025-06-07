@@ -12,7 +12,7 @@ const server = http.createServer(app);
 
 // Middleware
 app.use(cors({
-  origin: ["https://kone-chat-3hz9p55p9-kane-lovegoods-projects-fac17334.vercel.app", "http://localhost:5173"],
+  origin: ["https://kone-chat-xi.vercel.app", "http://localhost:5173"],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'token'],
   credentials: true,
@@ -25,7 +25,7 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 //socket.io server
 export const io = new Server(server, {
   cors: { 
-    origin: ["https://kone-chat-3hz9p55p9-kane-lovegoods-projects-fac17334.vercel.app", "http://localhost:5173"],
+    origin: ["https://kone-chat-xi.vercel.app", "http://localhost:5173"],
     methods: ["GET", "POST"],
     credentials: true
   },
