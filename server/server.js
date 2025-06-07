@@ -6,6 +6,7 @@ import { Server } from "socket.io";
 import { connectDB } from "./lib/db.js";
 import messageRouter from "./routes/messageRoutes.js";
 import userRouter from "./routes/userRoutes.js";
+
 // create express app and http server
 const app = express();
 const server = http.createServer(app);
@@ -19,6 +20,7 @@ app.use(cors({
   preflightContinue: false,
   optionsSuccessStatus: 204
 }));
+
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
@@ -38,7 +40,7 @@ export const io = new Server(server, {
 });
 
 //store online users
-export const userSocketMap = {}; //{userId: socketId}
+export const userSocketMap = {};
 
 //socket.io connection handler
 io.on("connection", (socket) => {
@@ -63,16 +65,37 @@ io.on("connection", (socket) => {
   });
 });
 
-(async () => {
+// Health check endpoint
+app.get("/", (req, res) => {
+  res.send("Server is running");
+});
+
+// API routes
+app.use("/api/auth", userRouter);
+app.use("/api/messages", messageRouter);
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    success: false,
+    message: "Something went wrong!",
+    error: process.env.NODE_ENV === "development" ? err.message : undefined
+  });
+});
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "Route not found"
+  });
+});
+
+// Connect to database and start server
+const startServer = async () => {
   try {
     await connectDB();
-
-    app.use("/api/status", (req, res) => res.send("Server is live"));
-
-    //routes set up
-    app.use("/api/auth", userRouter);
-    app.use("/api/messages", messageRouter);
-
     const PORT = process.env.PORT || 3000;
     server.listen(PORT, () => {
       console.log("Server is running on: " + PORT);
@@ -81,7 +104,11 @@ io.on("connection", (socket) => {
     });
   } catch (err) {
     console.error("Error during server startup:", err.message);
+    process.exit(1);
   }
-})();
-//export server for vercel
-export default server;
+};
+
+startServer();
+
+// Export for Vercel
+export default app;
