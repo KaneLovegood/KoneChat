@@ -52,7 +52,10 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
   const { email, pw } = req.body;
   try {
-    const userData = await User.findOne({ email }).maxTimeMS(5000);
+    const userData = await User.findOne({ email })
+      .select('email fullName pw img bio')
+      .maxTimeMS(5000)
+      .lean();
     
     if (!userData) {
       return res.status(404).json({ 
@@ -68,6 +71,8 @@ const login = async (req, res) => {
         message: "Invalid credentials" 
       });
     }
+
+    delete userData.pw;
 
     const token = generateToken(userData._id);
     res.status(200).json({
