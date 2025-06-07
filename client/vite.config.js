@@ -6,5 +6,6 @@ export default defineConfig({
   plugins: [tailwindcss(),react()],
   define: {
     'process.env': {}
-  }
+  },
+  base: '/'
 })
