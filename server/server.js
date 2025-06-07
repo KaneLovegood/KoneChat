@@ -26,9 +26,15 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 export const io = new Server(server, {
   cors: { 
     origin: ["https://kone-chat-xi.vercel.app", "http://localhost:5173"],
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "token"],
     credentials: true
   },
+  transports: ['websocket', 'polling'],
+  pingTimeout: 60000,
+  pingInterval: 25000,
+  upgradeTimeout: 30000,
+  allowEIO3: true
 });
 
 //store online users

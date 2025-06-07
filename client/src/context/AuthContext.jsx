@@ -107,7 +107,24 @@ export const AuthProvider = ({ children }) => {
     if (!userData || socket?.connected) return;
     const newSocket = io(backendURL, {
       query: { userId: userData._id },
+      transports: ['websocket', 'polling'],
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+      timeout: 20000,
+      autoConnect: true,
+      withCredentials: true
     });
+
+    newSocket.on('connect_error', (error) => {
+      console.error('Socket connection error:', error);
+      toast.error('Failed to connect to chat server');
+    });
+
+    newSocket.on('connect', () => {
+      console.log('Socket connected successfully');
+    });
+
     newSocket.connect();
     setSocket(newSocket);
     newSocket.on("getOnlineUsers", (userIds) => {
