@@ -126,14 +126,14 @@ const ChatCointainer = () => {
 
       {/* bottom area */}
       <div className="sticky bottom-0 left-0 right-0 bg-gray-900/85 bg- backdrop-blur-3xl flex items-center gap-3 p-3 w-full z-50">
-        <div className="flex-1 flex items-center bg-gray-100/12 px-3 rounded-full">
+        <div className="flex-1 flex items-center bg-gray-100/12 px-3 rounded-full min-w-0">
           <input
             onChange={(e) => setInput(e.target.value)}
             value={input}
             onKeyDown={(e) => (e.key === "Enter" ? handleSend(e) : null)}
             type="text"
             placeholder="Send a message"
-            className="flex-1 text-sm p-3 border-none rounded-lg outline-none text-white placeholder-gray-400"
+            className="flex-1 text-sm p-3 border-none rounded-lg outline-none text-white placeholder-gray-400 w-full min-w-0"
           />
           <input
             type="file"
@@ -142,7 +142,7 @@ const ChatCointainer = () => {
             hidden
             onChange={handleSendImg}
           />
-          <label htmlFor="img">
+          <label htmlFor="img" className="flex-shrink-0">
             <img
               src={assets.gallery_icon}
               className="w-5 mr-2 cursor-pointer"
@@ -152,7 +152,7 @@ const ChatCointainer = () => {
         <img
           onClick={handleSend}
           src={assets.send_button}
-          className="w-7 cursor-pointer"
+          className="w-7 cursor-pointer flex-shrink-0"
         />
       </div>
     </div>
