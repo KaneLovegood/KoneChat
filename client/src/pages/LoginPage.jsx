@@ -35,6 +35,11 @@ const LoginPage = () => {
       }
     } else {
       try {
+        console.log("Login attempt with:", { email, pw });
+        if (!email || !pw) {
+          toast.error("Please enter both email and password");
+          return;
+        }
         await login("login", { email, pw });
       } catch (error) {
         console.error("Login failed:", error);

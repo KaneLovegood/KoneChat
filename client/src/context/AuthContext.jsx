@@ -52,13 +52,34 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (state, credentials) => {
     try {
+      // Kiểm tra credentials
+      console.log("Credentials received:", credentials);
+      if (!credentials.email || !credentials.pw) {
+        toast.error("Email and password are required");
+        return;
+      }
+
       // Chỉ xóa token nếu đã có token cũ
       if (localStorage.getItem("token")) {
         delete axios.defaults.headers.common["token"];
       }
 
-      const { data } = await axios.post(`/api/auth/${state}`, credentials);
-      console.log("Login response:", data); // Thêm log để debug
+      const url = `/api/auth/${state}`;
+      console.log("Calling API:", backendURL + url);
+      
+      // Format lại credentials nếu cần
+      const formattedCredentials = {
+        email: credentials.email,
+        password: credentials.pw // Đổi từ pw sang password nếu server yêu cầu
+      };
+      console.log("With credentials:", formattedCredentials);
+
+      const response = await axios.post(url, formattedCredentials);
+      console.log("Response status:", response.status);
+      console.log("Response headers:", response.headers);
+      console.log("Login response:", response.data);
+
+      const { data } = response;
 
       if (data.success) {
         setAuthUser(data.userData);
