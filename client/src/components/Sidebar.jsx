@@ -6,7 +6,7 @@ import { AuthContext } from "../context/AuthContext.jsx";
 import { ChatContext } from "../context/ChatContext.jsx";
 
 const Sidebar = () => {
-  const { logout, onlineUser } = useContext(AuthContext);
+  const { logout, onlineUser, authUser } = useContext(AuthContext);
   const {
     getUsers,
     users,
@@ -38,11 +38,15 @@ const Sidebar = () => {
     >
       <div className="pb-5">
         <div className="flex justify-between items-center">
-          <img
-            src={KoneChatLogo}
-            className="max-w-22"
-            style={{ borderRadius: "50%" }}
-          ></img>
+          <div className="flex items-center">
+            <img
+              src={authUser.img || assets.avatar_icon}
+              className="max-w-22"
+              style={{ borderRadius: "50%" }}
+            ></img>
+
+            <h1 className="mx-5">{authUser.fullName}</h1>
+          </div>
 
           <div className="relative py-2">
             <img
