@@ -13,10 +13,13 @@ const server = http.createServer(app);
 // Middleware
 app.use(
   cors({
-    origin: "*",
+    origin: ["https://kone-chat-xi.vercel.app", "http://localhost:5173"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "token"],
+    exposedHeaders: ["Content-Type", "Authorization", "token"],
     credentials: true,
+    preflightContinue: false,
+    optionsSuccessStatus: 204
   })
 );
 app.use(express.json({ limit: "50mb" }));
@@ -25,9 +28,13 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 //socket.io server
 export const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: ["https://kone-chat-xi.vercel.app", "http://localhost:5173"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "token"],
+    exposedHeaders: ["Content-Type", "Authorization", "token"],
     credentials: true,
+    preflightContinue: false,
+    optionsSuccessStatus: 204
   },
 });
 
