@@ -52,25 +52,38 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (state, credentials) => {
     try {
-      // Xóa token cũ nếu có
-      delete axios.defaults.headers.common["token"];
+      // Chỉ xóa token nếu đã có token cũ
+      if (localStorage.getItem("token")) {
+        delete axios.defaults.headers.common["token"];
+      }
 
       const { data } = await axios.post(`/api/auth/${state}`, credentials);
+      console.log("Login response:", data); // Thêm log để debug
+
       if (data.success) {
         setAuthUser(data.userData);
         connectSocket(data.userData);
-        // Set token mới
         const newToken = data.token;
         axios.defaults.headers.common["token"] = newToken;
         setToken(newToken);
         localStorage.setItem("token", newToken);
-        toast.success(data.message);
+        toast.success(data.message || "Login successful");
       } else {
-        toast.error(data.message);
+        toast.error(data.message || "Login failed");
       }
     } catch (error) {
       console.error("Login error:", error);
-      toast.error(error.response?.data?.message || error.message);
+      console.log("Error response:", error.response);
+      console.log("Error message:", error.message);
+      
+      // Xử lý các trường hợp lỗi cụ thể
+      if (error.response?.status === 401) {
+        toast.error("Invalid email or password");
+      } else if (error.response?.status === 404) {
+        toast.error("User not found");
+      } else {
+        toast.error(error.response?.data?.message || "An error occurred during login");
+      }
     }
   };
 

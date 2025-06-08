@@ -37,7 +37,7 @@ const LoginPage = () => {
       try {
         await login("login", { email, pw });
       } catch (error) {
-        toast.error(error.message);
+        console.error("Login failed:", error);
       } finally {
         setIsLoading(false);
       }
