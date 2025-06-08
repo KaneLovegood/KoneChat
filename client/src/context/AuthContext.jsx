@@ -66,15 +66,9 @@ export const AuthProvider = ({ children }) => {
 
       const url = `/api/auth/${state}`;
       console.log("Calling API:", backendURL + url);
-      
-      // Format lại credentials nếu cần
-      const formattedCredentials = {
-        email: credentials.email,
-        password: credentials.pw // Đổi từ pw sang password nếu server yêu cầu
-      };
-      console.log("With credentials:", formattedCredentials);
+      console.log("With credentials:", credentials);
 
-      const response = await axios.post(url, formattedCredentials);
+      const response = await axios.post(url, credentials);
       console.log("Response status:", response.status);
       console.log("Response headers:", response.headers);
       console.log("Login response:", response.data);
