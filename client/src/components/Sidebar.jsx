@@ -24,6 +24,8 @@ const Sidebar = () => {
       )
     : users;
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   useEffect(() => {
     getUsers();
   }, [onlineUser]);
@@ -42,27 +44,30 @@ const Sidebar = () => {
             style={{ borderRadius: "50%" }}
           ></img>
 
-          <div className="relative py-2 group">
+          <div className="relative py-2">
             <img
               src={assets.menu_icon}
               className="max-h-5 cursor-pointer"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
             ></img>
-            <div
-              className="group-hover:block absolute top-full 
-            right-0 z-20 w-32 p-5 rounded-md bg-[#282142] border
-             border-gray-600 text-gray-100 hidden"
-            >
-              <p
-                onClick={() => navigate("/profile")}
-                className="cursor-pointer text-sm"
+            {isMenuOpen && (
+              <div
+                className="absolute top-full 
+                right-0 z-20 w-32 p-5 rounded-md bg-[#282142] border
+                border-gray-600 text-gray-100"
               >
-                Edit Profile
-              </p>
-              <hr className="my-2 border-t border-gray-500"></hr>
-              <p onClick={() => logout()} className="cursor-pointer text-sm">
-                Logout
-              </p>
-            </div>
+                <p
+                  onClick={() => navigate("/profile")}
+                  className="cursor-pointer text-sm"
+                >
+                  Edit Profile
+                </p>
+                <hr className="my-2 border-t border-gray-500"></hr>
+                <p onClick={() => logout()} className="cursor-pointer text-sm">
+                  Logout
+                </p>
+              </div>
+            )}
           </div>
         </div>
         <div className="bg-[#282141] rounded-full flex items-center gap-2 py-3 px-4 mt-5">
